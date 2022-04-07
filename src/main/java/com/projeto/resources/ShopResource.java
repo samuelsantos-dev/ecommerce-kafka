@@ -15,6 +15,7 @@ import com.projeto.domain.Shop;
 import com.projeto.domain.ShopItem;
 import com.projeto.dto.ShopDTO;
 import com.projeto.repositories.ShopRepository;
+import com.projeto.services.KafkaClient;
 
 @RestController
 @RequestMapping(value = "/shop")
@@ -22,6 +23,9 @@ public class ShopResource {
 
 	@Autowired
 	private ShopRepository shopRepository;
+	
+	@Autowired
+	private KafkaClient kafkaClient;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public List<ShopDTO> getShop() {
@@ -38,7 +42,10 @@ public class ShopResource {
 		for (ShopItem shopItem : shop.getItems()) {
 			shopItem.setShop(shop);
 		}
+		shopDTO = ShopDTO.convert(shopRepository.save(shop));
 
-		return ShopDTO.convert(shopRepository.save(shop));
+		
+		kafkaClient.sendMessage(shopDTO);
+		return shopDTO;
 	}
 }

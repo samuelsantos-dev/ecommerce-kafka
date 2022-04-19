@@ -80,7 +80,19 @@ public class Shop {
 	public void setItems(List<ShopItem> items) {
 		this.items = items;
 	}
-	
-	
+
+	public Shop() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Shop(Long id, String identifier, String status, LocalDate dateShop, List<ShopItem> items) {
+		super();
+		this.id = id;
+		this.identifier = identifier;
+		this.status = status;
+		this.dateShop = dateShop;
+		this.items = items;
+	}
 
 }
